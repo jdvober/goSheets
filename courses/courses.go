@@ -8,13 +8,13 @@ import (
 	"google.golang.org/api/classroom/v1"
 )
 
-type course struct {
+type Course struct {
 	name string
 	id   string
 }
 
 // List returns a slice of of Google Classroom Courses, where each course has a name and id
-func List(client *http.Client) []course {
+func List(client *http.Client) []Course {
 	// https://godoc.org/google.golang.org/api/classroom/v1#New
 	srv, err := classroom.New(client)
 	if err != nil {
@@ -49,12 +49,12 @@ func List(client *http.Client) []course {
 	if err != nil {
 		log.Fatalf("Unable to retrieve courses. %v", err)
 	}
-	courselist := []course{}
+	courselist := []Course{}
 	if len(courses.Courses) > 0 {
 		// fmt.Print("Courses:\n")
 		for _, c := range courses.Courses {
 			// fmt.Printf("%s (%s)\n", c.Name, c.Id)
-			courseInfo := course{
+			courseInfo := Course{
 				name: c.Name,
 				id:   c.Id,
 			}
