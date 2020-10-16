@@ -8,33 +8,33 @@ import (
 	"google.golang.org/api/classroom/v1"
 )
 
-type date struct {
-	year  int64
-	month int64
-	day   int64
+type Date struct {
+	Year  int64
+	Month int64
+	Day   int64
 }
-type timeOfDay struct {
-	hours   int64
-	minutes int64
+type TimeOfDay struct {
+	Hours   int64
+	Minutes int64
 }
 
-type coursework struct {
-	courseID      string
-	id            string
-	title         string
-	description   string
-	state         string
-	creationTime  string
-	updateTime    string
-	dueDate       date
-	dueTime       timeOfDay
-	scheduledTime string
-	maxPoints     float64
-	topicID       string
+type Coursework struct {
+	CourseID      string
+	Id            string
+	Title         string
+	Description   string
+	State         string
+	CreationTime  string
+	UpdateTime    string
+	DueDate       Date
+	DueTime       TimeOfDay
+	ScheduledTime string
+	MaxPoints     float64
+	TopicID       string
 }
 
 // List returns a list of all the coursework in a course with a specific Id
-func List(client *http.Client, id string) []coursework {
+func List(client *http.Client, id string) []Coursework {
 	srv, err := classroom.New(client)
 	if err != nil {
 		log.Fatalf("Unable to create classroom Client %v", err)
@@ -44,25 +44,25 @@ func List(client *http.Client, id string) []coursework {
 	if err != nil {
 		log.Fatalf("Unable to retrieve coursework. %v", err)
 	}
-	courseworkList := []coursework{}
+	courseworkList := []Coursework{}
 	if len(r.CourseWork) > 0 {
 		//fmt.Print("\nCoursework:\n")
 		for _, cw := range r.CourseWork {
 
-			cwork := coursework{
+			cwork := Coursework{
 
-				courseID:      cw.CourseId,
-				id:            cw.Id,
-				title:         cw.Title,
-				description:   cw.Description,
-				state:         cw.State,
-				creationTime:  cw.CreationTime,
-				updateTime:    cw.UpdateTime,
-				dueDate:       date{year: cw.DueDate.Year, month: cw.DueDate.Month, day: cw.DueDate.Day},
-				dueTime:       timeOfDay{hours: cw.DueTime.Hours, minutes: cw.DueTime.Minutes},
-				scheduledTime: cw.ScheduledTime,
-				maxPoints:     cw.MaxPoints,
-				topicID:       cw.TopicId,
+				CourseID:      cw.CourseId,
+				Id:            cw.Id,
+				Title:         cw.Title,
+				Description:   cw.Description,
+				State:         cw.State,
+				CreationTime:  cw.CreationTime,
+				UpdateTime:    cw.UpdateTime,
+				DueDate:       Date{Year: cw.DueDate.Year, Month: cw.DueDate.Month, Day: cw.DueDate.Day},
+				DueTime:       TimeOfDay{Hours: cw.DueTime.Hours, Minutes: cw.DueTime.Minutes},
+				ScheduledTime: cw.ScheduledTime,
+				MaxPoints:     cw.MaxPoints,
+				TopicID:       cw.TopicId,
 			}
 			courseworkList = append(courseworkList, cwork)
 		}

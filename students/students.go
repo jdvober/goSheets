@@ -8,16 +8,16 @@ import (
 	"google.golang.org/api/classroom/v1"
 )
 
-type profile struct {
-	first    string
-	last     string
-	id       string
-	email    string
-	courseId string
+type Profile struct {
+	First    string
+	Last     string
+	Id       string
+	Email    string
+	CourseId string
 }
 
 // List returns a list of all the students in a course with a specific Id
-func List(client *http.Client, id string) []profile {
+func List(client *http.Client, id string) []Profile {
 	srv, err := classroom.New(client)
 	if err != nil {
 		log.Fatalf("Unable to create classroom Client %v", err)
@@ -27,17 +27,17 @@ func List(client *http.Client, id string) []profile {
 	if err != nil {
 		log.Fatalf("Unable to retrieve students. %v", err)
 	}
-	roster := []profile{}
+	roster := []Profile{}
 	if len(students.Students) > 0 {
 		//fmt.Print("\nStudents:\n")
 
 		for _, s := range students.Students {
-			studentProfile := profile{
-				first:    s.Profile.Name.GivenName,
-				last:     s.Profile.Name.FamilyName,
-				id:       s.Profile.Id,
-				email:    s.Profile.EmailAddress,
-				courseId: s.CourseId,
+			studentProfile := Profile{
+				First:    s.Profile.Name.GivenName,
+				Last:     s.Profile.Name.FamilyName,
+				Id:       s.Profile.Id,
+				Email:    s.Profile.EmailAddress,
+				CourseId: s.CourseId,
 			}
 			roster = append(roster, studentProfile)
 		}

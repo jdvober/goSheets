@@ -18,7 +18,7 @@ func List(client *http.Client, id string, cwid string) []*classroom.StudentSubmi
 	courseWorkID := cwid
 	// pToken := ""
 
-	submissions := []*classroom.StudentSubmission{}
+	Submissions := []*classroom.StudentSubmission{}
 
 	// My attempt to get studentSubmissions using courseId 126909787383 and courseWorkId "-" which returns all studentSubmissions
 
@@ -28,8 +28,8 @@ func List(client *http.Client, id string, cwid string) []*classroom.StudentSubmi
 		log.Fatalf("Unable to retrieve submission. %v", err)
 	}
 	for _, s := range res.StudentSubmissions {
-		submissions = append(submissions, s)
+		Submissions = append(Submissions, s)
 	}
 
-	return submissions
+	return Submissions
 }
