@@ -1,4 +1,4 @@
-module github.com/jdvober/values
+module values
 
 go 1.15
 
