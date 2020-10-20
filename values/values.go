@@ -17,11 +17,6 @@ type Request struct {
 	}
 }
 
-// Sample Values for testing.  If being called from
-/* var majorDimension string = "COLUMNS"
- * var spreadsheetID string = "1HRfK4yZERLWd-OcDZ8pJRirdzdkHln3SUtIfyGZEjNk"
- * var r string = "F4:F5" */
-
 // Update adds values to a Google Sheet
 func Update(client *http.Client, spreadsheetID string, r string, values []interface{}) {
 
