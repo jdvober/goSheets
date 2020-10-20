@@ -1,4 +1,6 @@
+./client_secret.json
 ./credentials.json
 ./token.json
 credentials.json
 token.json
+client_secret.json
