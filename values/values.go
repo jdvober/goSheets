@@ -70,7 +70,6 @@ func BatchUpdate(client *http.Client, spreadsheetID string, rangeData string, ma
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Done.")
 }
 
 func Get(client *http.Client, spreadsheetID string, readRange string) [][]interface{} {
