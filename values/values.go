@@ -19,14 +19,15 @@ type Request struct {
 }
 type body struct {
 	Data struct {
-		Range  string     `json:"range"`
-		Values [][]string `json:"values"`
+		Range          string     `json:"range"`
+		Values         [][]string `json:"values"`
+		MajorDimension string     `json:"majorDimension"`
 	} `json:"data"`
 	ValueInputOption string `json:"valueInputOption"`
 }
 
 // Update adds values to a Google Sheet
-func Update(client *http.Client, spreadsheetID string, r string, values []interface{}) {
+func Update(client *http.Client, spreadsheetID string, r string, dimension string, values []interface{}) {
 
 	/* ctx := context.Background() */
 
@@ -39,6 +40,7 @@ func Update(client *http.Client, spreadsheetID string, r string, values []interf
 	var vr sheets.ValueRange
 	/* values := []interface{}{"One", "Two"} */
 	vr.Values = append(vr.Values, values)
+	vr.MajorDimension = dimension
 	_, err = sheetsService.Spreadsheets.Values.Update(spreadsheetID, r, &vr).ValueInputOption("RAW").Do()
 	if err != nil {
 		log.Fatalf("Unable to post data to sheet. %v", err)
@@ -46,7 +48,7 @@ func Update(client *http.Client, spreadsheetID string, r string, values []interf
 }
 
 // https://stackoverflow.com/questions/46230624/google-sheets-api-golang-batchupdatevaluesrequest
-func BatchUpdate(client *http.Client, spreadsheetID string, rangeData string, values [][]interface{}) {
+func BatchUpdate(client *http.Client, spreadsheetID string, rangeData string, majorDimension string, values [][]interface{}) {
 	/* client := auth.Authorize() */
 	sheetsService, err := sheets.New(client)
 	if err != nil {
@@ -60,8 +62,9 @@ func BatchUpdate(client *http.Client, spreadsheetID string, rangeData string, va
 		ValueInputOption: "USER_ENTERED",
 	}
 	rb.Data = append(rb.Data, &sheets.ValueRange{
-		Range:  rangeData,
-		Values: values,
+		Range:          rangeData,
+		Values:         values,
+		MajorDimension: majorDimension,
 	})
 	_, err = sheetsService.Spreadsheets.Values.BatchUpdate(spreadsheetID, rb).Do()
 	if err != nil {
