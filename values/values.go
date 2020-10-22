@@ -69,3 +69,22 @@ func BatchUpdate(client *http.Client, spreadsheetID string, rangeData string, va
 	}
 	fmt.Println("Done.")
 }
+
+func Get(client *http.Client, spreadsheetID string, readRange string) [][]interface{} {
+
+	srv, err := sheets.New(client)
+	if err != nil {
+		log.Fatalf("Unable to retrieve Sheets client: %v", err)
+	}
+
+	resp, err := srv.Spreadsheets.Values.Get(spreadsheetID, readRange).Do()
+	if err != nil {
+		log.Fatalf("Unable to retrieve data from sheet: %v", err)
+	}
+
+	if len(resp.Values) == 0 {
+		fmt.Println("No data found.")
+	}
+	return resp.Values
+
+}
