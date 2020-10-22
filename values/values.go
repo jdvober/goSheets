@@ -41,7 +41,7 @@ func Update(client *http.Client, spreadsheetID string, r string, dimension strin
 	/* values := []interface{}{"One", "Two"} */
 	vr.Values = append(vr.Values, values)
 	vr.MajorDimension = dimension
-	_, err = sheetsService.Spreadsheets.Values.Update(spreadsheetID, r, &vr).ValueInputOption("RAW").Do()
+	_, err = sheetsService.Spreadsheets.Values.Update(spreadsheetID, r, &vr).ValueInputOption("USER_ENTERED").Do()
 	if err != nil {
 		log.Fatalf("Unable to post data to sheet. %v", err)
 	}
