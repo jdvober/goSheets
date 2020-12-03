@@ -11,7 +11,7 @@ import (
 // Update adds values to a Google Sheet
 func UpdateValues(client *http.Client, spreadsheetID string, r string, dimension string, values []interface{}) {
 	// Authenticate
-	sheetsService, err := sheets.New(client)
+	srv, err := sheets.New(client)
 	if err != nil {
 		log.Fatalf("Unable to create sheets Client %v", err)
 	}
@@ -20,7 +20,7 @@ func UpdateValues(client *http.Client, spreadsheetID string, r string, dimension
 	/* values := []interface{}{"One", "Two"} */
 	vr.Values = append(vr.Values, values)
 	vr.MajorDimension = dimension
-	_, err = sheetsService.Spreadsheets.Values.Update(spreadsheetID, r, &vr).ValueInputOption("USER_ENTERED").Do()
+	_, err = srv.Spreadsheets.Values.Update(spreadsheetID, r, &vr).ValueInputOption("USER_ENTERED").Do()
 	if err != nil {
 		log.Fatalf("Unable to post data to sheet. %v", err)
 	}
@@ -28,7 +28,7 @@ func UpdateValues(client *http.Client, spreadsheetID string, r string, dimension
 
 // https://stackoverflow.com/questions/46230624/google-sheets-api-golang-batchupdatevaluesrequest
 func BatchUpdateValues(client *http.Client, spreadsheetID string, rangeData string, majorDimension string, values [][]interface{}) {
-	sheetsService, err := sheets.New(client)
+	srv, err := sheets.New(client)
 	if err != nil {
 		log.Fatalf("Unable to retrieve Sheets Client %v", err)
 	}
@@ -41,7 +41,7 @@ func BatchUpdateValues(client *http.Client, spreadsheetID string, rangeData stri
 		Values:         values,
 		MajorDimension: majorDimension,
 	})
-	_, err = sheetsService.Spreadsheets.Values.BatchUpdate(spreadsheetID, rb).Do()
+	_, err = srv.Spreadsheets.Values.BatchUpdate(spreadsheetID, rb).Do()
 	if err != nil {
 		log.Fatal(err)
 	}
