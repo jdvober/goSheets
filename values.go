@@ -1,4 +1,4 @@
-package values
+package gsheets
 
 import (
 	"fmt"
@@ -8,29 +8,8 @@ import (
 	"google.golang.org/api/sheets/v4"
 )
 
-type Request struct {
-	SpreadsheetID string
-	Range         string
-	RequestBody   struct {
-		Range          string
-		MajorDimension string
-		Values         [][]string
-	}
-}
-type body struct {
-	Data struct {
-		Range          string     `json:"range"`
-		Values         [][]string `json:"values"`
-		MajorDimension string     `json:"majorDimension"`
-	} `json:"data"`
-	ValueInputOption string `json:"valueInputOption"`
-}
-
 // Update adds values to a Google Sheet
-func Update(client *http.Client, spreadsheetID string, r string, dimension string, values []interface{}) {
-
-	/* ctx := context.Background() */
-
+func UpdateValues(client *http.Client, spreadsheetID string, r string, dimension string, values []interface{}) {
 	// Authenticate
 	sheetsService, err := sheets.New(client)
 	if err != nil {
@@ -48,16 +27,12 @@ func Update(client *http.Client, spreadsheetID string, r string, dimension strin
 }
 
 // https://stackoverflow.com/questions/46230624/google-sheets-api-golang-batchupdatevaluesrequest
-func BatchUpdate(client *http.Client, spreadsheetID string, rangeData string, majorDimension string, values [][]interface{}) {
-	/* client := auth.Authorize() */
+func BatchUpdateValues(client *http.Client, spreadsheetID string, rangeData string, majorDimension string, values [][]interface{}) {
 	sheetsService, err := sheets.New(client)
 	if err != nil {
 		log.Fatalf("Unable to retrieve Sheets Client %v", err)
 	}
 
-	/* spreadsheetId := "1HRfK4yZERLWd-OcDZ8pJRirdzdkHln3SUtIfyGZEjNk" */
-	/* rangeData := "sheet2!I1:J3" */
-	/* values := [][]interface{}{{"sample_A1", "sample_B1"}, {"sample_A2", "sample_B2"}, {"sample_A3", "sample_A3"}} */
 	rb := &sheets.BatchUpdateValuesRequest{
 		ValueInputOption: "USER_ENTERED",
 	}
@@ -72,8 +47,7 @@ func BatchUpdate(client *http.Client, spreadsheetID string, rangeData string, ma
 	}
 }
 
-func Get(client *http.Client, spreadsheetID string, readRange string) [][]interface{} {
-
+func GetValues(client *http.Client, spreadsheetID string, readRange string) [][]interface{} {
 	srv, err := sheets.New(client)
 	if err != nil {
 		log.Fatalf("Unable to retrieve Sheets client: %v", err)
@@ -88,5 +62,34 @@ func Get(client *http.Client, spreadsheetID string, readRange string) [][]interf
 		fmt.Println("No data found.")
 	}
 	return resp.Values
+}
+
+func Clear(client *http.Client, spreadsheetID string, r string) {
+	srv, err := sheets.New(client)
+	if err != nil {
+		log.Fatalf("Unable to retrieve Sheets client: %v", err)
+	}
+
+	rb := &sheets.ClearValuesRequest{}
+	_, err = sheetsService.Spreadsheets.Values.Clear(spreadsheetID, r, rb).Do()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+}
+
+func BatchClear(client *http.Client, spreadsheetID string, ranges []string) {
+	srv, err := sheets.New(client)
+	if err != nil {
+		log.Fatalf("Unable to retrieve Sheets client: %v", err)
+	}
+
+	rb := &sheets.BatchClearValuesRequest{
+		Ranges: ranges,
+	}
+	_, err = sheetsService.Spreadsheets.Values.BatchClear(spreadsheetID, rb).Do()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }
