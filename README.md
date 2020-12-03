@@ -1,4 +1,4 @@
-# goSheets
+# gSheets
 ## Example of writing to a sheet
 ```
 package main
