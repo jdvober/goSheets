@@ -71,7 +71,7 @@ func Clear(client *http.Client, spreadsheetID string, r string) {
 	}
 
 	rb := &sheets.ClearValuesRequest{}
-	_, err = sheetsService.Spreadsheets.Values.Clear(spreadsheetID, r, rb).Do()
+	_, err = srv.Spreadsheets.Values.Clear(spreadsheetID, r, rb).Do()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -87,7 +87,7 @@ func BatchClear(client *http.Client, spreadsheetID string, ranges []string) {
 	rb := &sheets.BatchClearValuesRequest{
 		Ranges: ranges,
 	}
-	_, err = sheetsService.Spreadsheets.Values.BatchClear(spreadsheetID, rb).Do()
+	_, err = srv.Spreadsheets.Values.BatchClear(spreadsheetID, rb).Do()
 	if err != nil {
 		log.Fatal(err)
 	}
