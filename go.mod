@@ -1,10 +1,3 @@
-module gsheets
+module github.com/jdvober/gsheets
 
 go 1.15
-
-//Comment these lines out when using for production
-//////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////
-
-require google.golang.org/api v0.36.0
