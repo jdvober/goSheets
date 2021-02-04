@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"google.golang.org/api/sheets/v4"
+	sheets "google.golang.org/api/sheets/v4"
 )
 
 // Update adds values to a Google Sheet
